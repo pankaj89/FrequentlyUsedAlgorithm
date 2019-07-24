@@ -30,14 +30,14 @@ class FrequentlyUsedAlgorithm(private val context: Context, private val dataset:
     fun getFrequentlyUsedList(): Single<ArrayList<String>>? {
         return Single.create<ArrayList<String>> {
             val list = itemDao.getAllList(dataset)
-            val sortedList = list.sortedWith(compareByDescending { it.crfScore }).map { "${it.itemId}(${it.crfScore})" }
+            val sortedList = list.sortedWith(compareByDescending { it.crfScore }).map { it.itemId }
             it.onSuccess(ArrayList(sortedList))
         }
     }
 
     fun getMostlyUsedList(): Single<ArrayList<String>>? {
         return Single.create<ArrayList<String>> {
-            val list = itemDao.getMostlyUsedList(dataset).map { "${it.itemId}(${it.accessCount})" }
+            val list = itemDao.getMostlyUsedList(dataset).map { it.itemId }
             it.onSuccess(ArrayList(list))
         }
     }
@@ -45,8 +45,7 @@ class FrequentlyUsedAlgorithm(private val context: Context, private val dataset:
     fun getRecentlyUsedList(): Single<ArrayList<String>>? {
         val currentTime = System.currentTimeMillis()
         return Single.create<ArrayList<String>> {
-            val list = itemDao.getRecentUsedList(dataset)
-                .map { "${it.itemId}(${(currentTime - it.accessTimestamp) / 1000} sec ago)" }
+            val list = itemDao.getRecentUsedList(dataset).map { it.itemId }
             it.onSuccess(ArrayList(list))
         }
     }

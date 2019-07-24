@@ -1,7 +1,6 @@
 package com.master.fualibrary
 
 import android.content.Context
-import io.reactivex.Single
 
 class FrequentlyUsedAlgorithm(private val context: Context, private val dataset: String) {
 
@@ -27,26 +26,19 @@ class FrequentlyUsedAlgorithm(private val context: Context, private val dataset:
         }
     }
 
-    fun getFrequentlyUsedList(): Single<ArrayList<String>>? {
-        return Single.create<ArrayList<String>> {
-            val list = itemDao.getAllList(dataset)
-            val sortedList = list.sortedWith(compareByDescending { it.crfScore }).map { it.itemId }
-            it.onSuccess(ArrayList(sortedList))
-        }
+    fun getFrequentlyUsedList(): ArrayList<String> {
+        val list = itemDao.getAllList(dataset)
+        val sortedList = list.sortedWith(compareByDescending { it.crfScore }).map { it.itemId }
+        return ArrayList(sortedList)
     }
 
-    fun getMostlyUsedList(): Single<ArrayList<String>>? {
-        return Single.create<ArrayList<String>> {
-            val list = itemDao.getMostlyUsedList(dataset).map { it.itemId }
-            it.onSuccess(ArrayList(list))
-        }
+    fun getMostlyUsedList(): ArrayList<String> {
+        val list = itemDao.getMostlyUsedList(dataset).map { it.itemId }
+        return ArrayList(list)
     }
 
-    fun getRecentlyUsedList(): Single<ArrayList<String>>? {
-        val currentTime = System.currentTimeMillis()
-        return Single.create<ArrayList<String>> {
-            val list = itemDao.getRecentUsedList(dataset).map { it.itemId }
-            it.onSuccess(ArrayList(list))
-        }
+    fun getRecentlyUsedList(): ArrayList<String> {
+        val list = itemDao.getRecentUsedList(dataset).map { it.itemId }
+        return ArrayList(list)
     }
 }

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.master.frequentlyusedalgo.databinding.ItemBinding
 import com.master.fualibrary.FrequentlyUsedAlgorithm
 import com.simpleadapter.SimpleAdapter
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateAdapter(frequentlyUsed: FrequentlyUsedAlgorithm) {
-        val disposable=frequentlyUsed.getFrequentlyUsedList()
+        Single.fromCallable { frequentlyUsed.getFrequentlyUsedList() }
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe({
@@ -70,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i("TAG", it.toString())
             })
 
-        frequentlyUsed.getMostlyUsedList()
+        Single.fromCallable { frequentlyUsed.getMostlyUsedList() }
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe({
@@ -82,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i("TAG", it.toString())
             })
 
-        frequentlyUsed.getRecentlyUsedList()
+        Single.fromCallable { frequentlyUsed.getRecentlyUsedList() }
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe({
